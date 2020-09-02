@@ -931,17 +931,14 @@ export default class Router implements BaseRouter {
     }
 
     // handle resolving href for dynamic routes
-    if (!pages.includes(cleanPathname!)) {
-      // eslint-disable-next-line array-callback-return
-      pages.some((page) => {
-        if (
-          isDynamicRoute(page) &&
-          getRouteRegex(page).re.test(cleanPathname!)
-        ) {
-          parsedHref.pathname = addBasePath(page)
-          return true
-        }
-      })
+    if (!pages.includes(cleanPathname)) {
+      const matchedPage = pages.find(
+        (page) =>
+          isDynamicRoute(page) && getRouteRegex(page).re.test(cleanPathname)
+      )
+      if (matchedPage !== undefined) {
+        parsedHref.pathname = addBasePath(matchedPage)
+      }
     }
     return parsedHref
   }
